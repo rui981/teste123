@@ -72,7 +72,7 @@ int llread(int fd, unsigned char * buffer) {
 	int res;
 	nr = sizeof(buffer);
 	res = read(fd, buffer, nr);
-	//printf("%X",buffer[2]);
+	printf("%i",nr);
 	printf("read return: %d\n", res);
 	return res;
 }
@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
 
 	//Abrir ligação
 	serialPort = llopen(argv[1], fd);
-	llclose(fd);
+	//llclose(fd);
 	//llread(serialPort, buff);
 
 }
