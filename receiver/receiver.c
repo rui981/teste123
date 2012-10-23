@@ -62,7 +62,7 @@ int llwrite(int fd, unsigned char * buffer) {
 	unsigned int nr;
 	nr = sizeof(buffer);
 	int res = 0;
-	printf(buffer);
+	printf("%X",buffer[2]);
 	res = write(fd, buffer, nr);
 	printf("write return: %d\n", res);
 	return res;
