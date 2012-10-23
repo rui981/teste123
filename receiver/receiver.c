@@ -40,7 +40,7 @@ int llopen(char *arg, int fd) {
 	}
 
 	printf("New termios structure set\n");
-	unsigned char * temp=NULL;
+	unsigned char * temp=setTrama(1);
 	int t=-1;
 	if (llread(fd, temp) > 0) {
 		printf("TRAMA RECEIVED\n");
