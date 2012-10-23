@@ -41,7 +41,7 @@ int llopen(char *arg, int fd) {
 
 	printf("New termios structure set\n");
 	unsigned char * temp=NULL;
-	int t;
+	int t=-1;
 	if (llread(fd, temp) > 0) {
 		printf("TRAMA RECEIVED\n");
 		t=verTramaS(temp, fd) ;
@@ -62,7 +62,6 @@ int llwrite(int fd, unsigned char * buffer) {
 	unsigned int nr;
 	nr = sizeof(buffer);
 	int res = 0;
-	printf("%X",buffer[2]);
 	res = write(fd, buffer, nr);
 	printf("write return: %d\n", res);
 	return res;
@@ -73,6 +72,7 @@ int llread(int fd, unsigned char * buffer) {
 	int res;
 	nr = sizeof(buffer);
 	res = read(fd, buffer, nr);
+	printf("%X",buffer[2]);
 	printf("read return: %d\n", res);
 	return res;
 }
