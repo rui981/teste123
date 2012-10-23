@@ -50,19 +50,19 @@ int llopen(char *arg, int fd) {
 		if(t>0){
 			llwrite(fd, temp);
 		printf("UA SENT\n");
-
+		printf("Open receiver side done!\n");
 		}else{
 			printf("li lodo");
 		}
 	}
-	printf("Open receiver side done!\n");
+
 	return fd;
 }
 int llwrite(int fd, unsigned char * buffer) {
 	unsigned int nr;
 	nr = sizeof(buffer);
 	int res = 0;
-
+	printf(buffer);
 	res = write(fd, buffer, nr);
 	printf("write return: %d\n", res);
 	return res;
