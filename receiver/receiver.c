@@ -51,6 +51,8 @@ int llopen(char *arg, int fd) {
 			llwrite(fd, temp);
 		printf("UA SENT\n");
 
+		}else{
+			printf("li lodo");
 		}
 	}
 	printf("Open receiver side done!\n");
