@@ -72,7 +72,7 @@ int llread(int fd, unsigned char * buffer) {
 	int res;
 	nr = sizeof(buffer);
 	res = read(fd, buffer, nr);
-	printf("%X",buffer[2]);
+	//printf("%X",buffer[2]);
 	printf("read return: %d\n", res);
 	return res;
 }
