@@ -40,22 +40,26 @@ int llopen(char *arg, int fd) {
 	}
 
 	printf("New termios structure set\n");
-	unsigned char * temp=setTrama(0);
+	
+	unsigned char temp[5]={FLAG,FLAG,FLAG,FLAG,FLAG};
+	unsigned char * lala=temp;		
 	int t=-1;
-	if (/*llread(fd, temp) > 0*/ 1) {
+	if (llread(fd, temp) > 0) {
 
 		imprimeTrama(temp);
 
 		printf("TRAMA RECEIVED\n");
-		t=verTramaS(setTrama(0), fd) ;
+		setTrama(t, temp, 5);
+		t=verTramaS(temp, fd) ;
 		printf("type %i\n", t);
-		temp=setTrama(t);
+		setTrama(t, lala, 5);
 		if(t>0){
-			llwrite(fd, temp);
-		printf("UA SENT\n");
-		printf("Open receiver side done!\n");
-		}else{
-			printf("li lodo");
+			llwrite(fd, lala);
+			printf("UA SENT\n");
+			printf("Open receiver side done!\n");
+		}
+		else{
+			printf("li lodo\n");
 		}
 	}
 
@@ -65,7 +69,7 @@ int llwrite(int fd, unsigned char * buffer) {
 	unsigned int nr;
 	nr = sizeof(buffer);
 	int res = 0;
-	res = write(fd, buffer, nr);
+	res = write(fd, buffer, 5);
 	printf("write return: %d\n", res);
 	return res;
 }
@@ -74,14 +78,14 @@ int llread(int fd, unsigned char * buffer) {
 	unsigned int nr;
 	int res;
 	nr = sizeof(buffer);
-	res = read(fd, buffer, nr);
+	res = read(fd, buffer, 5);
 	printf("%i",nr);
 	printf("read return: %d\n", res);
 	return res;
 }
 
 int llclose(int fd) {
-
+/*
 	unsigned char * ctempR=NULL;
 
 	if (llread(fd, ctempR) > 0) {
@@ -94,7 +98,7 @@ int llclose(int fd) {
 			}
 		}
 	}
-
+*/
 	close(fd);
 	return 0;
 }
@@ -121,37 +125,34 @@ int main(int argc, char *argv[]) {
 
 }
 
-unsigned char* setTrama(int type) {
+void setTrama(int type, unsigned char *buff, unsigned int length) {
 
-	unsigned char buff[5];
+       buff[0] = FLAG;
+       buff[1] = A;
+       buff[4] = FLAG;
 
-	buff[0] = FLAG;
-	buff[1] = A;
-	buff[4] = FLAG;
-
-	switch (type) {
+       switch (type) {
 //O: SET
 //1: DISC
 //2: UA
 //3: RR
 //4: REJ
-	case 0: {
-		buff[2] = SET;
-		buff[3] = buff[2] ^ A;
-	}
-		break;
-	case 1: {
-		buff[2] = DISC;
-		buff[3] = buff[2] ^ A;
-	}
-		break;
-	case 2: {
-		buff[2] = UA;
-		buff[3] = buff[2] ^ A;
-	}
-		break;
-	}
-	return buff;
+       case 0: {
+               buff[2] = SET;
+               buff[3] = buff[2] ^ A;
+       }
+               break;
+       case 1: {
+               buff[2] = DISC;
+               buff[3] = buff[2] ^ A;
+       }
+               break;
+       case 2: {
+               buff[2] = UA;
+               buff[3] = buff[2] ^ A;
+       }
+               break;
+       }
 }
 
 int verTramaS(unsigned char *set, int fd) {
@@ -167,9 +168,9 @@ int verTramaS(unsigned char *set, int fd) {
 
 		switch (state) {
 		case 'I': {
-			//printf("CRASHEI no I\n");
-			//printf("set[0] = %u\n", set[0]);
-			//printf("FLAG = %u\n", FLAG);
+			printf("ENTREI no I\n");
+			printf("set[0] = %u\n", set[0]);
+			printf("FLAG = %u\n", FLAG);
 			if (set[0] == FLAG) {
 				state = 'F';
 			}
@@ -177,7 +178,7 @@ int verTramaS(unsigned char *set, int fd) {
 			break;
 
 		case 'F': {
-			printf("CRASHEI NO F");
+			printf("ENTREI NO F\n");
 			if (set[1] == A) {
 				state = 'C';
 			}
@@ -185,35 +186,36 @@ int verTramaS(unsigned char *set, int fd) {
 			break;
 
 		case 'C': {
-			printf("CRASHEI NO C");
+			printf("ENTREI NO C\n");
 			if (set[2] == SET) {
-				printf("RECEBI SET");
+				printf("RECEBI SET\n");
 				answer=2;
 				//llwrite(fd, setTrama(2));
 				state = 'B';
-			}
+			}break;
 
 			if (set[2] == DISC) {
 				answer=1;
 				//llwrite(fd, setTrama(1));
 				state = 'B';
-			}
+			}break;
 
 			if (set[2] == UA) {
+				answer=0;
 				printf("Disconnected\n");
 				state='B';
 			}
 			else{
 				answer=-1;
-			}
+			}break;
 		}break;
 		case 'B': {
-			printf("CRASHEI NO B");
+			printf("ENTREI NO B\n");
 			unsigned char at = set[1];
 			unsigned char ct = set[2];
 			unsigned char bcc = at ^ ct;
 			if (bcc == set[3]) {
-				printf("Message received");
+				printf("Message received\n");
 				state = 'Q';
 			}else{
 				answer=-1;
@@ -221,9 +223,10 @@ int verTramaS(unsigned char *set, int fd) {
 		}
 			break;
 		case 'Q': {
-			printf("CRASHEI NO Q");
+			printf("ENTREI NO Q\n");
 			if (set[4] == FLAG) {
 				processed = 1;
+				
 			}
 		}break;
 		}

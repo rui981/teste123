@@ -39,19 +39,23 @@ int llopen(char *arg, int fd) {
 	}
 
 	printf("New termios structure set\n");
-	int t = NULL;
-	unsigned char * trame= setTrama(0);
-	imprimeTrama(trame);
-	if (llwrite(fd, trame) > 0) {
+	int t = -1;
+
+	unsigned char tr[5]={FLAG,A,A,A,A};
+	unsigned char * trame= tr;
+	setTrama(0, tr, 5);
+	
+	imprimeTrama(tr);
+	if (llwrite(fd, tr) > 0) {
 		printf("Enviei um set\n");
-		unsigned char* temp;
-		if (llread(fd, temp) > 0) {
-			t = verTramaS(temp, fd);
+		
+		if (llread(fd, tr) > 0) {
+			t = verTramaS(tr, fd);
 
 			if (t > 0) {
 				printf("recebi um pacote inteiro\n");
-				temp=setTrama(t);
-				llwrite(fd,temp);
+				setTrama(t, tr, 5);
+				llwrite(fd,tr);
 				printf("enviei um pacote tipo %i\n", t);
 
 			}
@@ -65,7 +69,7 @@ llwrite(int fd, unsigned char * buffer) {
 	unsigned int nr;
 	nr = sizeof(buffer);
 	int res = 0;
-	res = write(fd, buffer, nr);
+	res = write(fd, buffer, 5);
 	printf("write return: %d\n", res);
 	return res;
 }
@@ -74,13 +78,13 @@ llread(int fd, unsigned char * buffer) {
 	unsigned int nr;
 	int res;
 	nr = sizeof(buffer);
-	res = read(fd, buffer, nr);
+	res = read(fd, buffer, 5);
 	printf("read return: %d\n", res);
 	return res;
 }
 
 llclose(int fd) {
-
+/*
 	unsigned char * ctempW;
 	unsigned char * ctempR;
 	ctempW = setTrama(1);
@@ -93,7 +97,7 @@ llclose(int fd) {
 		if (llwrite(fd, t) > 0) {
 			printf("Disconnected\n");
 		}
-	}
+	}*/
 
 	close(fd);
 	return 0;
@@ -122,9 +126,7 @@ int main(int argc, char *argv[]) {
 
 }
 
-unsigned char * setTrama(int type) {
-
-	unsigned char buff[5];
+void setTrama(int type, unsigned char *buff, unsigned int length) {
 
 	buff[0] = FLAG;
 	buff[1] = A;
@@ -152,7 +154,6 @@ unsigned char * setTrama(int type) {
 	}
 		break;
 	}
-	return buff;
 }
 
 int verTramaS(unsigned char *set, int fd) {
@@ -187,20 +188,21 @@ int verTramaS(unsigned char *set, int fd) {
 				answer = 0;
 				//llwrite(fd, setTrama(2));
 				state = 'B';
-			}
+			} break;
 
 			if (set[2] == DISC) {
+				printf("recebi um disc\n");
 				answer = 2;
 				//llwrite(fd, setTrama(1));
 				state = 'B';
-			}
+			}break;
 
 			if (set[2] == UA) {
 				printf("start the data\n");
 				state = 'B';
 			} else {
 				answer = -1;
-			}
+			}break;
 		}
 			break;
 		case 'B': {
@@ -218,6 +220,7 @@ int verTramaS(unsigned char *set, int fd) {
 		case 'Q': {
 			if (set[4] == FLAG) {
 				processed = 1;
+				answer=1;
 			}
 		}
 			break;
@@ -228,9 +231,9 @@ int verTramaS(unsigned char *set, int fd) {
 
 
 void imprimeTrama(unsigned char * tr){
-	printf("F = %u", tr[0]);
-	printf("A = %u", tr[1]);
-	printf("C = %u", tr[2]);
-	printf("BCC = %u", tr[3]);
-	printf("F = %u", tr[4]);
+	printf("F = %u\n", tr[0]);
+	printf("A = %u\n", tr[1]);
+	printf("C = %u\n", tr[2]);
+	printf("BCC = %u\n", tr[3]);
+	printf("F = %u\n", tr[4]);
 }

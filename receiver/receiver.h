@@ -35,7 +35,7 @@ int llopen(char *arg, int fd); //Open connection
 int llwrite(int fd, unsigned char * buffer);  
 int llread(int fd, unsigned char * buffer);
 int llclose(int fd);
-unsigned char* setTrama(int type);
+void setTrama(int type, unsigned char *buff, unsigned int length);
 int verTramaS(unsigned char *set, int fd);
 void imprimeTrama(unsigned char * tr);
 #endif
