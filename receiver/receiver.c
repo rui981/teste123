@@ -225,9 +225,9 @@ int verTramaS(unsigned char *set, int fd) {
 
 
 void imprimeTrama(unsigned char * tr){
-	printf("F = %u", tr[0]);
-	printf("A = %u", tr[1]);
-	printf("C = %u", tr[2]);
-	printf("BCC = %u", tr[3]);
-	printf("F = %u", tr[4]);
+	printf("F = %u\n", tr[0]);
+	printf("A = %u\n", tr[1]);
+	printf("C = %u\n", tr[2]);
+	printf("BCC = %u\n", tr[3]);
+	printf("F = %u\n", tr[4]);
 }
