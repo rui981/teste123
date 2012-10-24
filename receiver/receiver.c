@@ -25,7 +25,7 @@ int llopen(char *arg, int fd) {
 	newtio.c_lflag = 0;
 
 	newtio.c_cc[VTIME] = 0; /* inter-character timer unused */
-	newtio.c_cc[VMIN] = 4; /* blocking read until 4 chars received */
+	newtio.c_cc[VMIN] = 5; /* blocking read until 5 chars received */
 
 	/*
 	 VTIME e VMIN devem ser alterados de forma a proteger com um temporizador a
@@ -40,9 +40,10 @@ int llopen(char *arg, int fd) {
 	}
 
 	printf("New termios structure set\n");
-	unsigned char * temp=setTrama(1);
+	unsigned char * temp=setTrama(0);
 	int t=-1;
-	if (llread(fd, temp) > 0) {
+	if (/*llread(fd, temp) > 0*/ 1) {
+
 		imprimeTrama(temp);
 		printf("TRAMA RECEIVED\n");
 		t=verTramaS(temp, fd) ;
