@@ -165,6 +165,7 @@ int verTramaS(unsigned char *set, int fd) {
 
 		switch (state) {
 		case 'I': {
+			printf("CRASHEI no I");
 			if (set[0] == FLAG) {
 				state = 'F';
 			}
@@ -172,6 +173,7 @@ int verTramaS(unsigned char *set, int fd) {
 			break;
 
 		case 'F': {
+			printf("CRASHEI NO F");
 			if (set[1] == A) {
 				state = 'C';
 			}
@@ -179,6 +181,7 @@ int verTramaS(unsigned char *set, int fd) {
 			break;
 
 		case 'C': {
+			printf("CRASHEI NO C");
 			if (set[2] == SET) {
 				printf("RECEBI SET");
 				answer=2;
@@ -201,6 +204,7 @@ int verTramaS(unsigned char *set, int fd) {
 			}
 		}break;
 		case 'B': {
+			printf("CRASHEI NO B");
 			unsigned char at = set[1];
 			unsigned char ct = set[2];
 			unsigned char bcc = at ^ ct;
@@ -213,6 +217,7 @@ int verTramaS(unsigned char *set, int fd) {
 		}
 			break;
 		case 'Q': {
+			printf("CRASHEI NO Q");
 			if (set[4] == FLAG) {
 				processed = 1;
 			}
