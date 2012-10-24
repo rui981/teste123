@@ -165,7 +165,9 @@ int verTramaS(unsigned char *set, int fd) {
 
 		switch (state) {
 		case 'I': {
-			printf("CRASHEI no I");
+			printf("CRASHEI no I\n");
+			printf("set[0] = %u\n", set[0]);
+			printf("FLAG = %u\n", FLAG);
 			if (set[0] == FLAG) {
 				state = 'F';
 			}
