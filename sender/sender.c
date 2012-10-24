@@ -24,7 +24,7 @@ int llopen(char *arg, int fd) {
 	/* set input mode (non-canonical, no echo,...) */
 	newtio.c_lflag = 0;
 	newtio.c_cc[VTIME] = 0; /* inter-character timer unused */
-	newtio.c_cc[VMIN] = 4; /* blocking read until 4 chars received */
+	newtio.c_cc[VMIN] = 5; /* blocking read until 5 chars received */
 
 	/*
 	 VTIME e VMIN devem ser alterados de forma a proteger com um temporizador a
@@ -40,7 +40,9 @@ int llopen(char *arg, int fd) {
 
 	printf("New termios structure set\n");
 	int t = NULL;
-	if (llwrite(fd, setTrama(0)) > 0) {
+	unsigned char * trame= setTrama(0);
+	imprimeTrama(trame);
+	if (llwrite(fd, trame) > 0) {
 		printf("Enviei um set\n");
 		unsigned char* temp;
 		if (llread(fd, temp) > 0) {
@@ -222,4 +224,13 @@ int verTramaS(unsigned char *set, int fd) {
 		}
 	}
 	return answer;
+}
+
+
+void imprimeTrama(unsigned char * tr){
+	printf("F = %u", tr[0]);
+	printf("A = %u", tr[1]);
+	printf("C = %u", tr[2]);
+	printf("BCC = %u", tr[3]);
+	printf("F = %u", tr[4]);
 }

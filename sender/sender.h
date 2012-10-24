@@ -37,6 +37,7 @@ int llread(int fd, unsigned char * buffer);
 int llclose(int fd);
 unsigned char* setTrama(int type);
 int verTramaS(unsigned char *set, int fd);
+void imprimeTrama(unsigned char * tr);
 
 #endif
 

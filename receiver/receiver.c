@@ -43,6 +43,7 @@ int llopen(char *arg, int fd) {
 	unsigned char * temp=setTrama(1);
 	int t=-1;
 	if (llread(fd, temp) > 0) {
+		imprimeTrama(temp);
 		printf("TRAMA RECEIVED\n");
 		t=verTramaS(temp, fd) ;
 		printf("type %i\n", t);
@@ -219,4 +220,14 @@ int verTramaS(unsigned char *set, int fd) {
 		}
 	}
 	return answer;
+}
+
+
+
+void imprimeTrama(unsigned char * tr){
+	printf("F = %u", tr[0]);
+	printf("A = %u", tr[1]);
+	printf("C = %u", tr[2]);
+	printf("BCC = %u", tr[3]);
+	printf("F = %u", tr[4]);
 }
