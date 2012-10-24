@@ -47,7 +47,7 @@ int llopen(char *arg, int fd) {
 		imprimeTrama(temp);
 
 		printf("TRAMA RECEIVED\n");
-		t=verTramaS(temp, fd) ;
+		t=verTramaS(setTrama(0), fd) ;
 		printf("type %i\n", t);
 		temp=setTrama(t);
 		if(t>0){
