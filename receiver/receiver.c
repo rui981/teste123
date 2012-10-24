@@ -45,6 +45,7 @@ int llopen(char *arg, int fd) {
 	if (/*llread(fd, temp) > 0*/ 1) {
 
 		imprimeTrama(temp);
+
 		printf("TRAMA RECEIVED\n");
 		t=verTramaS(temp, fd) ;
 		printf("type %i\n", t);
@@ -166,9 +167,9 @@ int verTramaS(unsigned char *set, int fd) {
 
 		switch (state) {
 		case 'I': {
-			printf("CRASHEI no I\n");
-			printf("set[0] = %u\n", set[0]);
-			printf("FLAG = %u\n", FLAG);
+			//printf("CRASHEI no I\n");
+			//printf("set[0] = %u\n", set[0]);
+			//printf("FLAG = %u\n", FLAG);
 			if (set[0] == FLAG) {
 				state = 'F';
 			}
